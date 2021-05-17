@@ -1,18 +1,30 @@
 import React from 'react'
 
 
- function Form({inputText, setInputText, todos, setTodos, setStatus}){
+ function Form({inputText, setInputText, todos, setTodos, setStatus,editStatus,setEditStatus,editTodo}){
     const inputTextHandler = (e) => {
-        console.log(e.target.value);
         setInputText(e.target.value)
     };
 
     const submitToDoHandler = (e) => {
         e.preventDefault();
-        setTodos([
-            ...todos,
-            {text: inputText, completed: false, id: Math.random() * 1000}
-        ]);
+        if(editStatus === false){
+            setTodos([
+                ...todos,
+                {text: inputText, completed: false, id: Math.random() * 1000}
+            ]);
+        }else if(editStatus === true){
+            setEditStatus(false);
+            setTodos(todos.map((item) => {
+                if(item.id === editTodo.id){
+                    return{
+                        ...item, text: inputText
+                    }
+                }
+                return item;
+            }));
+        }
+
         setInputText('');
 
     }
@@ -24,7 +36,7 @@ import React from 'react'
         <form>
             <input value={inputText} onChange={inputTextHandler} type="text" className="todo-input" />
             <button onClick={submitToDoHandler} className="todo-button" type="submit">
-                <i className="fas fa-plus-square"></i>
+                <i className={`${editStatus ? "fas fa-edit" : "fas fa-plus-square"}`}></i>
             </button>
             <div className="select">
                 <select onChange={statusHandler} name="todos" className="filter-todo">

@@ -10,11 +10,20 @@ function App() {
     const[todos, setTodos] = useState([])
     const [status, setStatus] = useState("all");
     const [filteredTodos, setFilteredTodos] = useState([])
+    const [editTodo, setEditTodo] = useState("");
+    const [editStatus, setEditStatus] = useState(false);
+
     //useEffect
     useEffect(() => {
         filteredHandler()
     }, [todos,status]);
+    useEffect(() => {
+        editHandler()
+    },[editTodo])
     //Functions
+    const editHandler = () => {
+        setInputText(editTodo.text);
+    }
     const filteredHandler = () => {
         switch (status){
             case 'completed':
@@ -32,8 +41,22 @@ function App() {
           <header>
               <h1>Todo List</h1>
           </header>
-        <Form  todos={todos} setTodos={setTodos} inputText={inputText} setInputText={setInputText}  setStatus={setStatus}/>
-        <ToDoList setTodos={setTodos} todos={todos} filteredTodos={filteredTodos}/>
+        <Form  todos={todos}
+               setTodos={setTodos}
+               inputText={inputText}
+               setInputText={setInputText}
+               editStatus={editStatus}
+               setStatus={setStatus}
+               setEditStatus={setEditStatus}
+               editTodo={editTodo}
+        />
+        <ToDoList inputText={inputText}
+                  setTodos={setTodos}
+                  todos={todos}
+                  filteredTodos={filteredTodos}
+                  setEditTodo = {setEditTodo}
+                  setEditStatus={setEditStatus}
+        />
       </div>
     );
 }
